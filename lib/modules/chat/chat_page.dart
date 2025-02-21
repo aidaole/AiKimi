@@ -164,6 +164,7 @@ class _ChatPageState extends State<ChatPage> {
   Container _buildChatInputWidget() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
+      // 增加容器高度以适应多行输入
       height: 60,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -182,7 +183,7 @@ class _ChatPageState extends State<ChatPage> {
           children: [
             const Icon(
               Icons.mic,
-              size: 30,
+              size: 25,
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -190,7 +191,9 @@ class _ChatPageState extends State<ChatPage> {
                 controller: _textController,
                 enabled: true,
                 autofocus: false,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.multiline, // 修改为多行键盘类型
+                maxLines: null, // 允许无限行数
+                textInputAction: TextInputAction.newline, // 回车键变为换行
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '有什么命令尽管问我',
@@ -200,29 +203,33 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             Icon(Icons.add_circle,
-                size: 30, color: Colors.black.withOpacity(0.6)),
+                size: 25, color: Colors.black.withOpacity(0.6)),
             const SizedBox(width: 10),
-            GestureDetector(
-              onTap: _hasInput ? _handleSend : null,
-              child: Container(
-                height: 36,
-                width: 36,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blue.withOpacity(0.1),
-                ),
-                padding: const EdgeInsets.all(5),
-                child: Center(
-                  child: Icon(
-                    _hasInput ? Icons.send : Icons.phone,
-                    size: 24,
-                    color: Colors.blueAccent,
-                  ),
-                ),
-              ),
-            ),
+            _buildSendButton(),
             const SizedBox(width: 10),
           ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _buildSendButton() {
+    return GestureDetector(
+      onTap: _hasInput ? _handleSend : null,
+      child: Container(
+        height: 36,
+        width: 36,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue.withOpacity(0.1),
+        ),
+        padding: const EdgeInsets.all(5),
+        child: Center(
+          child: Icon(
+            _hasInput ? Icons.send : Icons.phone,
+            size: 24,
+            color: Colors.blueAccent,
+          ),
         ),
       ),
     );
